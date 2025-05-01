@@ -96,7 +96,7 @@ npm install
 #### Fill `.env` in `learn2earn/`:
 
 ```env
-DATABASE_URL="file:./dev.db"
+MONGODB/DATABASE_URL=your_database_url
 NEXT_PUBLIC_CONTRACT_ADDRESS="0x..."
 NEXT_PUBLIC_CHAIN_ID="11155111" # (Sepolia in this case)
 ```
