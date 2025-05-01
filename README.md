@@ -8,7 +8,8 @@ This is a complete plug-n-play **Learn2Earn Web3 DApp** built with:
 - ✅ Easily deployable to any EVM chain (Polygon, Base, Sepolia, etc.)
 
 ---
-[learn2Earn Demo](https://prnt.sc/AMt8QVdqfyqb)
+![Learn2Earn Demo](./public/pic1.png)
+
 
 ## 📆 Project Structure
 
@@ -40,9 +41,9 @@ learn2earn-dapp/
 - 📍 Prisma: Database integration ( MongoDB, SQLite, PostgreSQL or PlanetScale)
 - 🛄 Deployable to: **Ethereum, Polygon, Base, Sepolia, BNB Chain, Optimism, Arbitrum, etc.**
 
-![Learn2Earn Demo](https://prnt.sc/uL0PEinlKcec)
-![Learn2Earn Demo](https://prnt.sc/dV7hVYQ7D9FZ)
+
 ---
+![Learn2Earn Demo](./public/pic2.png)
 
 ## ⚙️ Setup Instructions
 
@@ -88,6 +89,7 @@ export const ABI = [...];
 ✅ Done! Now your frontend can connect to the deployed contract.
 
 ---
+![Learn2Earn Demo](./public/pic3.png)
 
 ### 3. Setup Fullstack App (Frontend + Backend + DB)
 
@@ -137,7 +139,7 @@ Open in browser: [http://localhost:3000](http://localhost:3000)
 Add your RPC + Private Key in `.env` to deploy accordingly.
 
 ---
-![Learn2Earn Demo](https://prnt.sc/TG4TL0V1aHU3)
+![Learn2Earn Demo](./public/pic4.png)
 
 ## 🛠️ Customization
 
@@ -153,7 +155,7 @@ Add your RPC + Private Key in `.env` to deploy accordingly.
 This DApp is licensed under [MIT] or [Commercial License] (based on your sale model).  
 Buyers can deploy and customize it on their chain.
 
-![Learn2Earn Demo](https://prnt.sc/zyvWMyIUGkcZ)
+![Learn2Earn Demo](./public/pic5.png)
 
 ---
 
