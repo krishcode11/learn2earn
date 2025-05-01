@@ -1,0 +1,164 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Content {
+  id          String   @id @default(cuid()) @map("_id")
+  content     String
+  type        String
+  status      String
+  version     Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  versions    ContentVersion[]
+  translations ContentTranslation[]
+  metrics     ContentMetrics?
+  schedule    ContentSchedule?
+}
+
+model ContentVersion {
+  id            String   @id @default(cuid()) @map("_id")
+  contentId     String
+  version       Int
+  content       String
+  createdAt     DateTime @default(now())
+  parentContent Content  @relation(fields: [contentId], references: [id])
+}
+
+model ContentTranslation {
+  id                String   @id @default(cuid()) @map("_id")
+  contentId         String
+  language          String
+  translatedContent String
+  createdAt         DateTime @default(now())
+  content           Content  @relation(fields: [contentId], references: [id])
+}
+
+model ContentMetrics {
+  id            String   @id @default(cuid()) @map("_id")
+  contentId     String   @unique
+  views         Int      @default(0)
+  likes         Int      @default(0)
+  shares        Int      @default(0)
+  qualityScore  Float    @default(0)
+  content       Content  @relation(fields: [contentId], references: [id])
+}
+
+model ContentSchedule {
+  id          String   @id @default(cuid()) @map("_id")
+  contentId   String   @unique
+  publishAt   DateTime
+  expireAt    DateTime?
+  content     Content  @relation(fields: [contentId], references: [id])
+}
+
+model Subscription {
+  id            String   @id @default(cuid()) @map("_id")
+  userId        String
+  plan          String
+  status        String
+  startDate     DateTime @default(now())
+  endDate       DateTime
+  features      Json
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model TokenTransaction {
+  id            String   @id @default(cuid()) @map("_id")
+  userId        String
+  amount        Float
+  type          String
+  description   String
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model CorporateTraining {
+  id            String   @id @default(cuid()) @map("_id")
+  companyId     String
+  programName   String
+  participants  Int
+  startDate     DateTime
+  endDate       DateTime
+  status        String
+  price         Float
+}
+
+model Certification {
+  id            String   @id @default(cuid()) @map("_id")
+  userId        String
+  courseId      String
+  issueDate     DateTime @default(now())
+  expiryDate    DateTime?
+  status        String
+  fee           Float
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model ApiAccess {
+  id            String   @id @default(cuid()) @map("_id")
+  enterpriseId  String
+  apiKey        String   @unique
+  permissions   Json
+  createdAt     DateTime @default(now())
+  lastUsed      DateTime?
+}
+
+model Course {
+  id          String   @id @default(cuid()) @map("_id")
+  title       String
+  description String
+  rewardAmount Float   @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  progress    CourseProgress[]
+  chapters    Chapter[]
+}
+
+model Chapter {
+  id          String   @id @default(cuid()) @map("_id")
+  title       String
+  description String
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CourseProgress {
+  id          String   @id @default(cuid()) @map("_id")
+  userId      String
+  courseId    String
+  chapterId   String?
+  status      String   @default("not_started")
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+  course      Course   @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model User {
+  id            String   @id @default(cuid()) @map("_id")
+  email         String   @unique
+  password      String?
+  name          String?
+  walletAddress String?  @unique
+  balance       Float    @default(0)
+  role          String   @default("user")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  subscriptions Subscription[]
+  transactions  TokenTransaction[]
+  certifications Certification[]
+  courseProgress CourseProgress[]
+} 
