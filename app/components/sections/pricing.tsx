@@ -6,11 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+const USD_TO_INR = 85; // Static conversion rate for display
+
 const plans = [
   {
     id: 'free',
     name: 'Free',
     price: '0',
+    priceInr: '0',
     description: 'Perfect for getting started with blockchain development',
     features: [
       'Access to basic courses',
@@ -25,6 +28,7 @@ const plans = [
     id: 'pro',
     name: 'Pro',
     price: '29',
+    priceInr: (29 * USD_TO_INR).toString(),
     description: 'Best for serious developers looking to advance their career',
     features: [
       'All Free features',
@@ -42,6 +46,7 @@ const plans = [
     id: 'enterprise',
     name: 'Enterprise',
     price: 'Custom',
+    priceInr: 'Custom',
     description: 'For teams and organizations',
     features: [
       'All Pro features',
@@ -120,10 +125,13 @@ export function PricingSection() {
                       <span className="text-4xl font-bold">
                         {plan.price === 'Custom' ? plan.price : `$${plan.price}`}
                       </span>
-                      {isIndia && plan.price !== 'Custom' && usdToInr && (
+                      {plan.priceInr && plan.priceInr !== 'Custom' && (
                         <span className="text-lg font-semibold text-orange-500 ml-2">
-                          ₹{Math.round(Number(plan.price) * usdToInr).toLocaleString('en-IN')}
+                          ₹{Number(plan.priceInr).toLocaleString('en-IN')}
                         </span>
+                      )}
+                      {plan.priceInr === 'Custom' && (
+                        <span className="text-lg font-semibold text-orange-500 ml-2">Custom</span>
                       )}
                       {plan.price !== 'Custom' && (
                         <span className="text-muted-foreground ml-2">/month</span>
