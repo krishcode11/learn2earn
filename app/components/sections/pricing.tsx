@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const plans = [
   {
@@ -57,6 +58,33 @@ const plans = [
 ];
 
 export function PricingSection() {
+  const [isIndia, setIsIndia] = useState(false);
+  const [usdToInr, setUsdToInr] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Detect country using ipapi.co (free, no key required)
+    fetch('https://ipapi.co/json/')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.country_code === 'IN') {
+          setIsIndia(true);
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    if (isIndia) {
+      // Fetch USD to INR rate from exchangerate-api.com (free tier)
+      fetch('https://open.er-api.com/v6/latest/USD')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.rates && data.rates.INR) {
+            setUsdToInr(data.rates.INR);
+          }
+        });
+    }
+  }, [isIndia]);
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
@@ -88,10 +116,15 @@ export function PricingSection() {
                     )}
                   </div>
                   <div className="mt-4">
-                    <div className="flex items-baseline">
+                    <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-bold">
                         {plan.price === 'Custom' ? plan.price : `$${plan.price}`}
                       </span>
+                      {isIndia && plan.price !== 'Custom' && usdToInr && (
+                        <span className="text-lg font-semibold text-orange-500 ml-2">
+                          ₹{Math.round(Number(plan.price) * usdToInr).toLocaleString('en-IN')}
+                        </span>
+                      )}
                       {plan.price !== 'Custom' && (
                         <span className="text-muted-foreground ml-2">/month</span>
                       )}
